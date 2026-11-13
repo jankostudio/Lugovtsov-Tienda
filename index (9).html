@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<title>Lugovtsov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&family=Italianno&display=swap">
+<style>
+/* Layout: tienda de joyería de fondo claro y mucho aire; cabecera fija con iconos mínimos, portada centrada con una piedra, cuadrícula de piezas de 2 columnas en móvil, paneles laterales para lista de deseos y cesta. */
+:root{
+  --bg:#111113; --surface:#18181B; --tile:#242429; --ink:#F3F3F5; --on-ink:#111113;
+  --muted:#A6A6AE; --line:#2F2F35; --accent:#C9A24B;
+  --gem1:#F7FAFD; --gem2:#DCE7F1; --gem3:#B8CCDF; --gem4:#93AEC8; --gem5:#6F8DAB; --gemline:#8FA3B8;
+  --display:"Jost","Helvetica Neue",Arial,sans-serif; --serif:"EB Garamond",Georgia,"Times New Roman",serif;
+}
+/* Tema único: siempre claro, también con el móvil en modo oscuro. */
+:root{color-scheme:dark;--script:"Italianno","Snell Roundhand",cursive;--cat:#B9B9C1;--ear:#D9A7A7;--eye:#D8C27A;--whisk:#D2D2D8;--snow1:#4B4E58;--snow2:#2E3037}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#000;z-index:30}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+p{margin:0}
+.wrap{max-width:1280px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.announce{background:#000;color:#fff;text-align:center;padding-block:13px;font-family:var(--display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.announce b{font-weight:500;color:var(--accent);border-bottom:1px solid currentColor}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:35;background:#000;color:#fff;--ink:#fff;--on-ink:#000;border-bottom:1px solid rgba(201,162,75,.5)}
+.bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:64px}
+.bar .l{display:flex;justify-content:flex-start}
+.bar .r{display:flex;justify-content:flex-end}
+.ib{position:relative;width:40px;height:44px;display:grid;place-items:center;background:none;border:0;padding:0}
+.ib svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.badge{position:absolute;top:5px;right:2px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--accent);color:#111;font-family:var(--display);font-size:10.5px;line-height:17px;text-align:center}
+.mark{font-family:var(--script);font-weight:400;font-size:clamp(32px,9vw,42px);letter-spacing:0;line-height:1;text-decoration:none;white-space:nowrap}
+.searchrow{padding-bottom:12px}
+.searchrow input{width:100%;padding:11px 2px;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);font-family:var(--serif);font-size:18px;border-radius:0}
+
+.hero{padding-block:44px 56px;text-align:center}
+#heroArt svg{width:min(190px,52%);height:auto;display:block;margin:0 auto 18px}
+.stage{perspective:900px;width:min(440px,100%);margin:0 auto 8px}
+.brand{display:block;width:100%;height:auto;overflow:visible;transform-origin:50% 55%;will-change:transform}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+.hero #heroArt,.hero h1,.hero p,.hero .cta{animation:rise .9s cubic-bezier(.2,.7,.2,1) backwards}
+.hero #heroArt{animation-delay:1.7s}.hero h1{animation-delay:2s}.hero p{animation-delay:2.2s}.hero .cta{animation-delay:2.4s}
+@media (prefers-reduced-motion:reduce){.hero #heroArt,.hero h1,.hero p,.hero .cta{animation:none}}
+.hero{overflow-x:clip}
+.brand .bt{font-family:var(--script);font-size:112px;fill:var(--ink);text-anchor:middle}
+.brand .bt2{fill:var(--accent);opacity:.6}
+.hero h1{font-size:clamp(26px,6.4vw,46px);letter-spacing:.01em;text-transform:uppercase;line-height:1.15;max-width:18em;margin-inline:auto}
+.hero p{margin:16px auto 26px;max-width:34em;font-size:19px;color:var(--muted)}
+.cta{display:inline-block;font-family:var(--display);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;padding-bottom:5px;border-bottom:1px solid var(--ink)}
+
+.coll{padding-block:48px 64px;background:var(--surface)}
+.coll h2{text-align:center;font-size:clamp(20px,4.6vw,28px);letter-spacing:.1em;text-transform:uppercase}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-top:26px;padding-bottom:6px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:9px 15px;border:1px solid var(--line);background:transparent;font-family:var(--display);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;border-radius:0}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.count{margin-top:18px;font-size:16px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 12px;margin-top:18px}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:44px 24px}}
+@media(min-width:1100px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{text-align:center;min-width:0}
+.tile{position:relative;background:var(--tile);aspect-ratio:1;display:grid;place-items:center}
+.tile svg{width:86%;height:auto;display:block}
+.tag{position:absolute;top:10px;left:10px;background:var(--surface);padding:4px 9px;font-family:var(--display);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.heart{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface);display:grid;place-items:center;padding:0}
+.heart svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
+.heart.on svg{fill:var(--accent);stroke:var(--accent)}
+.card{perspective:760px}
+.tile{transform-style:preserve-3d;will-change:transform}
+.card{position:relative;z-index:25}
+.spot{position:fixed;left:0;top:0;width:260px;height:260px;margin:-130px 0 0 -130px;border-radius:50%;background:radial-gradient(circle,rgba(232,196,98,.34),rgba(232,196,98,.14) 40%,rgba(232,196,98,0) 70%);pointer-events:none;z-index:20;opacity:0;transition:opacity .4s;will-change:transform,opacity}
+.fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:inline-flex;align-items:center;gap:10px;padding:12px 20px 12px 14px;border-radius:999px;background:linear-gradient(135deg,#E6C56B,#B88F36);color:#17130A;text-decoration:none;font-family:var(--display);font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 10px 28px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.16);transition:transform .2s}
+.fab:hover{transform:translateY(-2px)}
+.fab svg{width:26px;height:26px;fill:currentColor;flex:none}
+.tile svg{transform:translateZ(38px);filter:drop-shadow(0 14px 12px rgba(0,0,0,.55))}
+@media (prefers-reduced-motion:no-preference){
+  .card{opacity:0;transform:translateY(28px) scale(.96)}
+  .card.in{opacity:1;transform:none;transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*90ms)}
+}
+.tile .tag,.tile .heart{transform:translateZ(54px)}
+.card h3{margin:14px 0 4px;font-size:12.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;line-height:1.35}
+.mat{font-size:15px;color:var(--muted);line-height:1.35}
+.price{margin:8px 0 12px;font-family:var(--display);font-size:14px;letter-spacing:.04em}
+.btn{display:block;width:100%;padding:13px 6px;background:var(--ink);color:var(--on-ink);border:1px solid var(--ink);font-family:var(--display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;border-radius:0}
+.btn:hover{opacity:.86}
+.btn.ghost{background:transparent;color:var(--ink)}
+.empty{padding:28px 4px;color:var(--muted);text-align:center}
+
+.why{padding-block:60px;background:var(--bg)}
+.why h2{text-align:center;font-size:clamp(20px,4.6vw,28px);letter-spacing:.1em;text-transform:uppercase;margin-bottom:34px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:30px}
+@media(min-width:760px){.cols{grid-template-columns:repeat(3,minmax(0,1fr));gap:48px}}
+.cols h3{font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;text-align:center}
+.cols p{text-align:center;color:var(--muted);max-width:26em;margin-inline:auto}
+
+.offer{background:var(--surface);color:var(--ink);border-block:1px solid var(--line);padding-block:56px;text-align:center}
+.offer h2{font-size:clamp(22px,5vw,32px);letter-spacing:.08em;text-transform:uppercase}
+.offer p{margin:12px auto 24px;max-width:30em;opacity:.82}
+.offer form{display:flex;gap:10px;max-width:460px;margin-inline:auto;flex-wrap:wrap}
+.offer input{flex:1 1 220px;min-width:0;padding:12px 2px;background:transparent;border:0;border-bottom:1px solid currentColor;color:inherit;font-family:var(--serif);font-size:17px;border-radius:0}
+.offer input::placeholder{color:inherit;opacity:.6}
+.offer button{padding:13px 22px;background:var(--accent);color:#17130A;border:0;font-family:var(--display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;border-radius:0}
+.offer :focus-visible{outline-color:var(--accent)}
+
+a.btn{text-align:center;text-decoration:none;color:var(--on-ink)}
+a.btn.ghost{color:var(--ink)}
+.btn.inline{display:inline-block;width:auto;padding:14px 28px}
+.pedidos,.insta{padding-block:60px;text-align:center}
+.pedidos{background:var(--surface)}
+.insta{background:var(--bg)}
+.about{padding-block:64px;background:var(--bg)}
+.about .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);text-align:center;margin-bottom:14px}
+.about h2{font-size:clamp(22px,5.4vw,34px);letter-spacing:.06em;text-transform:uppercase;text-align:center;line-height:1.25;max-width:20em;margin-inline:auto}
+.about .copy{max-width:36em;margin:28px auto 0}
+.about .copy p{font-size:19px;line-height:1.65;color:var(--muted);margin-bottom:16px}
+.about h3{font-size:clamp(17px,4.4vw,22px);letter-spacing:.08em;text-transform:uppercase;text-align:center;margin:44px 0 22px}
+.perks{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;max-width:42em;margin-inline:auto}
+@media(min-width:760px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}.perk:last-child{grid-column:1/-1}}
+.perk{background:var(--surface);border:1px solid var(--line);padding:18px 18px 16px}
+.perk b{display:block;font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.perk p{margin:0;color:var(--muted);font-size:17px;line-height:1.5}
+.about .closing{max-width:36em;margin:38px auto 0;text-align:center}
+.about .closing p{font-size:19px;line-height:1.65;color:var(--muted);margin-bottom:14px}
+.about .closing .strong{font-family:var(--display);font-size:clamp(17px,4.6vw,24px);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:26px 0}
+.about .closing .last{color:var(--ink)}
+.pedidos h2,.insta h2{font-size:clamp(20px,4.6vw,28px);letter-spacing:.1em;text-transform:uppercase}
+.pedidos .lead,.insta .lead{margin:14px auto 22px;max-width:32em;color:var(--muted);font-size:19px}
+.phone{font-family:var(--display);font-size:clamp(20px,5.4vw,26px);letter-spacing:.06em;margin:0 0 20px;user-select:all}
+.cta-row{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:center}
+.ig{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.5;display:block;margin:0 auto 14px}
+footer{background:var(--surface);padding-block:40px;text-align:center;border-top:1px solid var(--line)}
+footer .mark{display:inline-block;margin-bottom:12px}
+footer p{font-size:14.5px;color:var(--muted);max-width:40em;margin-inline:auto}
+
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.46);opacity:0;visibility:hidden;transition:opacity .25s;z-index:60}
+.scrim.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;bottom:0;width:min(430px,100%);background:var(--surface);z-index:70;visibility:hidden;display:flex;flex-direction:column;transition:transform .3s,visibility .3s;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer.right{right:0;transform:translateX(100%);padding-right:env(safe-area-inset-right,0px)}
+.drawer.left{left:0;transform:translateX(-100%);padding-left:env(safe-area-inset-left,0px)}
+.drawer.open{transform:none;visibility:visible}
+#dMenu{width:min(50vw,340px);border-right:1px solid rgba(201,162,75,.5)}
+#btnMenu{color:var(--accent)}
+#btnMenu svg{stroke-width:2}
+#dMenu .dh{padding-left:16px}
+#dMenu .db{padding:8px 16px}
+#dMenu .navlist a{font-size:12.5px;letter-spacing:.1em;padding:14px 0}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 6px 20px;border-bottom:1px solid var(--line)}
+.dh h2{font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.db{flex:1;overflow-y:auto;padding:8px 20px}
+.df{padding:16px 20px 20px;border-top:1px solid var(--line)}
+.navlist{list-style:none;margin:0;padding:8px 0}
+.navlist a{display:block;padding:15px 0;border-bottom:1px solid var(--line);text-decoration:none;font-family:var(--display);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.row{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.thumb{flex:none;width:84px;height:84px;background:var(--tile);display:grid;place-items:center}
+.thumb svg{width:92%;height:auto}
+.rinfo{min-width:0;flex:1}
+.rinfo h4{font-size:12.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;line-height:1.35}
+.rinfo .mat{margin-top:2px}
+.acts{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.link{background:none;border:0;padding:4px 0;font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid currentColor;border-radius:0}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line)}
+.qty button{width:32px;height:32px;background:none;border:0;font-size:18px;line-height:1}
+.qty span{min-width:26px;text-align:center;font-family:var(--display);font-size:13px}
+.sum{display:flex;justify-content:space-between;font-family:var(--display);font-size:13px;letter-spacing:.06em;padding:4px 0}
+.sum.t{font-size:15px;font-weight:500;padding-top:10px;margin-top:6px;border-top:1px solid var(--line)}
+.coupon{display:flex;gap:8px;margin-bottom:14px}
+.coupon input{flex:1;min-width:0;padding:10px 2px;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);font-family:var(--display);font-size:13px;letter-spacing:.1em;text-transform:uppercase;border-radius:0}
+.cmsg{font-size:15px;margin:-6px 0 12px;min-height:1.4em;color:var(--muted)}
+
+.modal{position:fixed;left:50%;top:50%;width:min(420px,calc(100% - 32px));max-height:calc(100% - 32px);overflow-y:auto;background:var(--surface);z-index:70;padding:26px 24px 28px;transform:translate(-50%,-48%);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s}
+.modal.open{opacity:1;visibility:visible;transform:translate(-50%,-50%)}
+.modal .x{position:absolute;top:6px;right:6px}
+.tabs{display:flex;gap:22px;margin-bottom:20px}
+.tabs button{background:none;border:0;padding:6px 0;font-family:var(--display);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid transparent;border-radius:0}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.modal p.note{color:var(--muted);font-size:16px;margin-bottom:18px}
+.modal label{display:block;margin-bottom:14px;font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.modal input{display:block;width:100%;margin-top:4px;padding:10px 2px;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);font-family:var(--serif);font-size:17px;text-transform:none;letter-spacing:0;border-radius:0}
+.modal .btn{margin-top:8px}
+
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);max-width:calc(100% - 32px);background:var(--ink);color:var(--on-ink);padding:12px 18px;font-family:var(--display);font-size:13px;letter-spacing:.04em;text-align:center;opacity:0;visibility:hidden;transition:opacity .25s,transform .25s,visibility .25s;z-index:90}
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
+.gm polygon{stroke:var(--gemline);stroke-width:1;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.f1{fill:var(--gem1)}.f2{fill:var(--gem2)}.f3{fill:var(--gem3)}.f4{fill:var(--gem4)}.f5{fill:var(--gem5)}
+section[id]{scroll-margin-top:84px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style>
+[hidden]{display:none!important}
+img{max-width:100%}
+</style>
+</head>
+<body>
+<div class="announce">Primera compra: 10 % con el código <b>BIENVENIDA10</b></div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <div class="l">
+        <button class="ib" id="btnMenu" aria-label="Abrir menú"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <button class="ib" id="btnSearch" aria-label="Buscar" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg></button>
+      </div>
+      <a class="mark" href="#top" id="home">Lugovtsov</a>
+      <div class="r">
+        <button class="ib" id="btnWish" aria-label="Lista de deseos"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7-4.4-9.2-9A5.3 5.3 0 0 1 12 6.3a5.3 5.3 0 0 1 9.2 5.2c-2.2 4.6-9.2 9-9.2 9z"/></svg><span class="badge" id="wishCount" hidden>0</span></button>
+        <button class="ib" id="btnUser" aria-label="Mi cuenta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 21c.7-4 3.6-6 7.5-6s6.8 2 7.5 6"/></svg></button>
+        <button class="ib" id="btnCart" aria-label="Cesta"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="badge" id="cartCount" hidden>0</span></button>
+      </div>
+    </div>
+    <div class="searchrow" id="searchRow" hidden>
+      <input type="search" id="q" placeholder="Buscar anillo, pendientes, diamante…" aria-label="Buscar en la colección" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div class="stage"><svg id="brandSvg" class="brand" viewBox="0 62 540 198" role="img" aria-label="Lugovtsov" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="snowG" cx="50%" cy="30%" r="80%"><stop offset="0" stop-color="var(--snow1)"/><stop offset="1" stop-color="var(--snow2)"/></radialGradient>
+          <clipPath id="bAbove"><rect x="0" y="0" width="540" height="230"/></clipPath>
+          <clipPath id="bWriteClip"><rect id="bWriteRect" x="100" y="0" width="0" height="300"/></clipPath>
+        </defs>
+        <g id="bTitleG" clip-path="url(#bWriteClip)">
+          <text id="bTitle2" class="bt bt2" x="270" y="148">Lugovtsov</text>
+          <text id="bTitle" class="bt" x="270" y="148">Lugovtsov</text>
+        </g>
+        <g clip-path="url(#bAbove)"><g id="bCat">
+          <ellipse cx="0" cy="70" rx="46" ry="70" fill="var(--cat)"/>
+          <polygon points="-31,-12 -27,-46 -7,-27" fill="var(--cat)"/>
+          <polygon points="31,-12 27,-46 7,-27" fill="var(--cat)"/>
+          <polygon points="-27,-18 -25,-37 -13,-26" fill="var(--ear)"/>
+          <polygon points="27,-18 25,-37 13,-26" fill="var(--ear)"/>
+          <ellipse cx="0" cy="0" rx="35" ry="31" fill="var(--cat)"/>
+          <g id="bEyeL" transform="translate(-13,-3)"><ellipse rx="8" ry="8.5" fill="var(--eye)"/><ellipse id="bPL" rx="2.6" ry="6" fill="#0A0A0C"/><circle cx="-2.4" cy="-3" r="1.6" fill="#fff"/></g>
+          <g id="bEyeR" transform="translate(13,-3)"><ellipse rx="8" ry="8.5" fill="var(--eye)"/><ellipse id="bPR" rx="2.6" ry="6" fill="#0A0A0C"/><circle cx="-2.4" cy="-3" r="1.6" fill="#fff"/></g>
+          <polygon points="-3.6,8 3.6,8 0,12.2" fill="var(--ear)"/>
+          <path d="M0 12.2 L0 16 M0 16 Q-5 20 -9 17 M0 16 Q5 20 9 17" fill="none" stroke="#6A6A72" stroke-width="1.2" stroke-linecap="round"/>
+          <g stroke="var(--whisk)" stroke-width="0.9" stroke-linecap="round" fill="none">
+            <path d="M-22 10 L-56 4"/><path d="M-22 14 L-57 16"/><path d="M-22 18 L-52 27"/>
+            <path d="M22 10 L56 4"/><path d="M22 14 L57 16"/><path d="M22 18 L52 27"/>
+          </g>
+        </g></g>
+        <ellipse cx="270" cy="230" rx="176" ry="24" fill="url(#snowG)"/>
+        <g id="bPaws"><ellipse id="bPawL" rx="9" ry="6.5" fill="var(--cat)"/><ellipse id="bPawR" rx="9" ry="6.5" fill="var(--cat)"/></g>
+      </svg></div>
+      <div id="heroArt"></div>
+      <h1>Diamantes creados en laboratorio</h1>
+      <p>Joyería con diamantes de laboratorio: el mismo brillo y la misma dureza que un diamante de mina, con un origen que se puede seguir paso a paso.</p>
+      <a class="cta" href="#coleccion" data-go="coleccion">Descubrir la colección</a>
+    </div>
+  </section>
+
+  <section class="coll" id="coleccion">
+    <div class="wrap">
+      <h2 id="collTitle">Toda la joyería</h2>
+      <div class="chips" id="chips" role="group" aria-label="Filtrar por tipo de pieza"></div>
+      <p class="count" id="count"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="about" id="nosotros">
+    <div class="wrap">
+      <p class="eyebrow">Sobre nosotros</p>
+      <h2>💎 Moissanita: una joya nacida de las estrellas</h2>
+      <div class="copy">
+        <p>¿Sabías que una de las piedras más fascinantes del mundo tiene su origen en un meteorito?</p>
+        <p>Nuestra historia comienza en 1893, cuando el químico francés Henri Moissan descubrió unos diminutos cristales en fragmentos de un meteorito caído en Arizona (Estados Unidos). Fascinado por su belleza y propiedades, investigó aquel mineral, que años después recibiría su nombre: MOISSANITA.</p>
+        <p>Durante décadas, esta extraordinaria gema fue prácticamente imposible de encontrar en tamaños adecuados para la joyería, debido a su extrema rareza en la naturaleza.</p>
+        <p>Sin embargo, gracias a los avances científicos de los años 90, fue posible reproducirla en laboratorio, conservando las extraordinarias propiedades de este mineral.</p>
+      </div>
+      <h3>✨ ¿Por qué enamora la moissanita?</h3>
+      <div class="perks">
+        <div class="perk"><b>💎 Brillo extraordinario</b><p>Refleja la luz con una intensidad espectacular y ofrece destellos de fuego únicos.</p></div>
+        <div class="perk"><b>👑 Elegancia y exclusividad</b><p>Una gema sofisticada que convierte cualquier joya en algo especial.</p></div>
+        <div class="perk"><b>🛡️ Gran resistencia</b><p>Su dureza de 9,25 en la escala de Mohs la convierte en una excelente opción para joyería de uso diario.</p></div>
+        <div class="perk"><b>🌱 Creada en laboratorio</b><p>Sin necesidad de extraer la gema de un meteorito ni de recurrir a la minería para obtenerla.</p></div>
+        <div class="perk"><b>❤️ Lujo más accesible</b><p>Disfruta de una joya espectacular sin tener que gastar una fortuna.</p></div>
+      </div>
+      <div class="closing">
+        <p>La moissanita no es un diamante. Es una gema con identidad propia, una historia extraordinaria y un brillo capaz de enamorar a primera vista.</p>
+        <p class="strong">No necesitas pagar más para brillar más.</p>
+        <p>✨ Descubre la belleza de la moissanita y encuentra esa joya que habla de ti.</p>
+        <p class="last">💍 Tu brillo, tus reglas. Tu historia comienza aquí.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="why" id="origen">
+    <div class="wrap">
+      <h2>Por qué un diamante de laboratorio</h2>
+      <div class="cols">
+        <div><h3>Un diamante real</h3><p>Mismo carbono, misma estructura cristalina y misma dureza que un diamante de mina. Se cultiva en un reactor durante semanas.</p></div>
+        <div><h3>Origen conocido</h3><p>Cada piedra tiene un recorrido documentado, desde su cultivo hasta el engaste en la joya.</p></div>
+        <div><h3>Certificado incluido</h3><p>Cada diamante suelto se entrega con su certificado gemológico: quilates, talla, color y pureza.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pedidos" id="pedidos">
+    <div class="wrap">
+      <h2>Haz tu pedido</h2>
+      <p class="lead">Escríbenos por WhatsApp con las piezas que te interesan y te confirmamos disponibilidad, precio y forma de pago.</p>
+      <p class="phone" id="phone">+34 666 13 11 01</p>
+      <div class="cta-row">
+        <a class="btn inline" href="https://wa.me/34666131101?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Lugovtsov." target="_blank" rel="noopener">Escribir por WhatsApp</a>
+        <button class="link" id="copyPhone" type="button">Copiar número</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="insta" id="instagram">
+    <div class="wrap">
+      <svg class="ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none"/></svg>
+      <h2>Síguenos en Instagram</h2>
+      <p class="lead">Mira las piezas nuevas y las últimas novedades.</p>
+      <div class="cta-row">
+        <a class="btn inline ghost" style="text-transform:none;letter-spacing:.06em;font-size:14px" href="https://www.instagram.com/_moissanite_jewerly_?psln=N2F1MGsyY3c2OG8w" target="_blank" rel="noopener">@_moissanite_jewerly_</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="offer" id="descuento">
+    <div class="wrap">
+      <h2>10 % en tu primera compra</h2>
+      <p>Deja tu correo y recibe tu código de bienvenida. Con una cuenta también podrás guardar tu lista de deseos y ver tus pedidos.</p>
+      <form id="nlForm">
+        <input type="email" id="nlEmail" placeholder="Tu correo electrónico" aria-label="Tu correo electrónico" required autocomplete="email">
+        <button type="submit">Quiero mi código</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="mark" href="#top" data-go="top">Lugovtsov</a>
+    <p>© 2026 Lugovtsov. Diseño de demostración por Janko Studio. Piezas, textos y precios de ejemplo hasta tener el catálogo real.</p>
+  </div>
+</footer>
+
+<a class="fab" id="fab" href="https://wa.me/34666131101?text=Hola%2C%20quiero%20hacer%20un%20pedido%20en%20Lugovtsov." target="_blank" rel="noopener" aria-label="Hacer un pedido por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+  <span>Hacer pedido</span>
+</a>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer left" id="dMenu" aria-hidden="true" aria-label="Menú">
+  <div class="dh"><h2>Menú</h2><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="db"><ul class="navlist" id="navlist"></ul></div>
+</aside>
+
+<aside class="drawer right" id="dWish" aria-hidden="true" aria-label="Lista de deseos">
+  <div class="dh"><h2>Lista de deseos</h2><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="db" id="wishBody"></div>
+</aside>
+
+<aside class="drawer right" id="dCart" aria-hidden="true" aria-label="Cesta">
+  <div class="dh"><h2>Cesta</h2><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="db" id="cartBody"></div>
+  <div class="df" id="cartFoot"></div>
+</aside>
+
+<div class="modal" id="mAcc" role="dialog" aria-modal="true" aria-label="Cuenta" aria-hidden="true">
+  <button class="ib x" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tabNew" aria-selected="true">Crear cuenta</button>
+    <button role="tab" id="tabIn" aria-selected="false">Entrar</button>
+  </div>
+  <p class="note" id="accNote">Guarda tu lista de deseos, sigue tus pedidos y recibe un 10 % en tu primera compra.</p>
+  <form id="accForm">
+    <label id="lblName">Nombre<input type="text" id="accName" autocomplete="name"></label>
+    <label>Correo electrónico<input type="email" id="accMail" required autocomplete="email"></label>
+    <label>Contraseña<input type="password" id="accPass" required minlength="6" autocomplete="current-password"></label>
+    <button class="btn" type="submit" id="accBtn">Crear cuenta</button>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var EUR=function(n){return n.toLocaleString('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0})};
+  var METAL={blanco:'#C4C7CC',amarillo:'#CDAA5A',rosa:'#D4A08F'};
+  var CATS=[['todo','Toda la joyería'],['anillos','Anillos'],['pendientes','Pendientes'],['colgantes','Colgantes'],['pulseras','Pulseras'],['sueltos','Diamantes sueltos']];
+  var P=[
+    {id:'aurora',cat:'anillos',name:'Solitario Aurora',mat:'Oro blanco 18 k · 0,50 ct',price:1480,kind:'ring',metal:'blanco',isNew:true},
+    {id:'brisa',cat:'pendientes',name:'Pendientes Brisa',mat:'Oro blanco 18 k · 2 × 0,25 ct',price:1290,kind:'earrings',metal:'blanco'},
+    {id:'lumen',cat:'colgantes',name:'Colgante Lumen',mat:'Oro amarillo 18 k · 0,30 ct',price:890,kind:'pendant',metal:'amarillo',isNew:true},
+    {id:'riviera',cat:'pulseras',name:'Pulsera Riviera',mat:'Oro blanco 18 k · 1,20 ct en total',price:2350,kind:'bracelet',metal:'blanco'},
+    {id:'halo',cat:'anillos',name:'Anillo Halo',mat:'Oro rosa 18 k · 0,75 ct',price:2100,kind:'ring',metal:'rosa'},
+    {id:'estrella',cat:'pendientes',name:'Pendientes Estrella',mat:'Oro amarillo 18 k · 2 × 0,15 ct',price:760,kind:'earrings',metal:'amarillo'},
+    {id:'brillante1',cat:'sueltos',name:'Brillante 1,00 ct',mat:'Talla brillante · color F · pureza VS1',price:2900,kind:'loose',metal:'blanco'},
+    {id:'brillante05',cat:'sueltos',name:'Brillante 0,50 ct',mat:'Talla brillante · color G · pureza VS2',price:980,kind:'loose',metal:'blanco'}
+  ];
+  var byId={};P.forEach(function(p){byId[p.id]=p});
+
+  var ICON_HEART='<svg viewBox="0 0 24 24"><path d="M12 20.5s-7-4.4-9.2-9A5.3 5.3 0 0 1 12 6.3a5.3 5.3 0 0 1 9.2 5.2c-2.2 4.6-9.2 9-9.2 9z"/></svg>';
+
+  function gem(cx,cy,s){
+    return '<g transform="translate('+cx+' '+cy+') scale('+s+') translate(-100 -118)">'+
+      '<polygon class="f2" points="62,72 82,102 34,102"/><polygon class="f2" points="138,72 166,102 118,102"/>'+
+      '<polygon class="f1" points="62,72 138,72 118,102 82,102"/>'+
+      '<polygon class="f4" points="34,102 82,102 100,164"/><polygon class="f3" points="82,102 118,102 100,164"/>'+
+      '<polygon class="f5" points="118,102 166,102 100,164"/></g>';
+  }
+  function art(kind,metal){
+    var c=METAL[metal]||METAL.blanco,b='';
+    if(kind==='ring'){b='<circle cx="100" cy="132" r="44" fill="none" stroke="'+c+'" stroke-width="9"/>'+gem(100,80,.4)}
+    else if(kind==='earrings'){b='<path d="M64 54v34M136 54v34" stroke="'+c+'" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="64" cy="52" r="4" fill="'+c+'"/><circle cx="136" cy="52" r="4" fill="'+c+'"/>'+gem(64,114,.3)+gem(136,114,.3)}
+    else if(kind==='pendant'){b='<path d="M30 36L100 104L170 36" fill="none" stroke="'+c+'" stroke-width="2.5" stroke-linejoin="round"/>'+gem(100,128,.34)}
+    else if(kind==='bracelet'){b='<ellipse cx="100" cy="112" rx="72" ry="38" fill="none" stroke="'+c+'" stroke-width="6"/>';[[44,126],[68,144],[100,151],[132,144],[156,126]].forEach(function(p){b+=gem(p[0],p[1],.16)})}
+    else{b=gem(100,112,.95)}
+    return '<svg class="gm" viewBox="0 0 200 200" aria-hidden="true">'+b+'</svg>';
+  }
+
+  var state={wish:[],cart:{},coupon:false,cat:'todo',q:''};
+  try{
+    var s=JSON.parse(localStorage.getItem('lugovtsov')||'{}');
+    if(Array.isArray(s.wish))state.wish=s.wish.filter(function(i){return byId[i]});
+    if(s.cart&&typeof s.cart==='object'){Object.keys(s.cart).forEach(function(k){if(byId[k]&&s.cart[k]>0)state.cart[k]=s.cart[k]})}
+    state.coupon=!!s.coupon;
+  }catch(e){}
+  function save(){try{localStorage.setItem('lugovtsov',JSON.stringify({wish:state.wish,cart:state.cart,coupon:state.coupon}))}catch(e){}}
+
+  var toastT;
+  function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},2600)}
+
+  var noReveal=false,started=false,io=null;
+  function reveal(){
+    var cards=document.querySelectorAll('#grid .card:not(.in)');
+    if(!cards.length)return;
+    if(!('IntersectionObserver' in window)){cards.forEach(function(c){c.classList.add('in')});return}
+    if(!io){io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -5% 0px'})}
+    cards.forEach(function(c){io.observe(c)});
+  }
+  function card(p,i){
+    var w=state.wish.indexOf(p.id)>-1;
+    return '<article class="card'+(noReveal?' in':'')+'" style="--i:'+(i%4)+'"><div class="tile">'+(p.isNew?'<span class="tag">Novedad</span>':'')+
+      '<button class="heart'+(w?' on':'')+'" data-wish="'+p.id+'" aria-pressed="'+w+'" aria-label="'+(w?'Quitar de la lista de deseos: ':'Añadir a la lista de deseos: ')+p.name+'">'+ICON_HEART+'</button>'+
+      art(p.kind,p.metal)+'</div><h3>'+p.name+'</h3><p class="mat">'+p.mat+'</p><p class="price">'+EUR(p.price)+'</p>'+
+      '<button class="btn" data-add="'+p.id+'">Añadir a la cesta</button></article>';
+  }
+  function renderChips(){
+    $('#chips').innerHTML=CATS.map(function(c){return '<button class="chip" data-cat="'+c[0]+'" aria-pressed="'+(state.cat===c[0])+'">'+c[1]+'</button>'}).join('');
+    $('#navlist').innerHTML=CATS.map(function(c){return '<li><a href="#coleccion" data-cat="'+c[0]+'" data-go="coleccion">'+c[1]+'</a></li>'}).join('')+
+      '<li><a href="#nosotros" data-go="nosotros">Sobre nosotros</a></li><li><a href="#pedidos" data-go="pedidos">Pedidos</a></li><li><a href="#instagram" data-go="instagram">Instagram</a></li>';
+  }
+  function renderGrid(){
+    var q=state.q.trim().toLowerCase();
+    var list=P.filter(function(p){return (state.cat==='todo'||p.cat===state.cat)&&(!q||(p.name+' '+p.mat+' '+p.cat).toLowerCase().indexOf(q)>-1)});
+    var title=CATS.filter(function(c){return c[0]===state.cat})[0][1];
+    $('#collTitle').textContent=title;
+    $('#count').textContent=list.length+(list.length===1?' modelo':' modelos');
+    $('#grid').innerHTML=list.length?list.map(card).join(''):'';
+    if(!list.length){$('#grid').innerHTML='<p class="empty" style="grid-column:1/-1">No hay piezas con esa búsqueda. Prueba con otra palabra.</p>'}
+    reveal();
+  }
+  function renderWish(){
+    var el=$('#wishBody');
+    if(!state.wish.length){el.innerHTML='<p class="empty">Tu lista está vacía. Toca el corazón de una pieza para guardarla aquí.</p>';return}
+    el.innerHTML=state.wish.map(function(id){var p=byId[id];
+      return '<div class="row"><div class="thumb">'+art(p.kind,p.metal)+'</div><div class="rinfo"><h4>'+p.name+'</h4><p class="mat">'+p.mat+'</p><p class="price" style="margin:6px 0 0">'+EUR(p.price)+'</p>'+
+        '<div class="acts"><button class="link" data-add="'+p.id+'">Añadir a la cesta</button><button class="link" data-wish="'+p.id+'">Quitar</button></div></div></div>'}).join('');
+  }
+  function totals(){
+    var sub=0;Object.keys(state.cart).forEach(function(id){sub+=byId[id].price*state.cart[id]});
+    var disc=state.coupon?Math.round(sub*0.1):0;
+    return {sub:sub,disc:disc,total:sub-disc};
+  }
+  var WA='34666131101';
+  function waLink(text){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(text)}
+  function orderLink(){
+    var ids=Object.keys(state.cart);
+    if(!ids.length)return waLink('Hola, quiero hacer un pedido en Lugovtsov.');
+    var t=totals();
+    var lines=ids.map(function(id){var p=byId[id],n=state.cart[id];return '• '+n+' × '+p.name+' — '+EUR(p.price*n)});
+    return waLink('Hola, quiero hacer este pedido en Lugovtsov:\n'+lines.join('\n')+'\nTotal: '+EUR(t.total)+(state.coupon?' (con el código BIENVENIDA10)':''));
+  }
+  function renderCart(msg){
+    var ids=Object.keys(state.cart),body=$('#cartBody'),foot=$('#cartFoot');
+    if(!ids.length){body.innerHTML='<p class="empty">Tu cesta está vacía.</p>';foot.innerHTML='';foot.hidden=true;return}
+    foot.hidden=false;
+    body.innerHTML=ids.map(function(id){var p=byId[id],n=state.cart[id];
+      return '<div class="row"><div class="thumb">'+art(p.kind,p.metal)+'</div><div class="rinfo"><h4>'+p.name+'</h4><p class="mat">'+p.mat+'</p>'+
+        '<div class="acts"><span class="qty"><button data-qty="-1" data-id="'+id+'" aria-label="Quitar una unidad">−</button><span>'+n+'</span><button data-qty="1" data-id="'+id+'" aria-label="Añadir una unidad">+</button></span><span class="price" style="margin:0">'+EUR(p.price*n)+'</span></div></div></div>'}).join('');
+    var t=totals();
+    foot.innerHTML='<form class="coupon" id="cpForm"><input id="cpCode" placeholder="Código de descuento" aria-label="Código de descuento" value="'+(state.coupon?'BIENVENIDA10':'')+'"><button class="link" type="submit">Aplicar</button></form>'+
+      '<p class="cmsg" id="cpMsg">'+(msg||(state.coupon?'Código BIENVENIDA10 aplicado: 10 % de descuento.':''))+'</p>'+
+      '<div class="sum"><span>Subtotal</span><span>'+EUR(t.sub)+'</span></div>'+
+      (t.disc?'<div class="sum"><span>Descuento 10 %</span><span>−'+EUR(t.disc)+'</span></div>':'')+
+      '<div class="sum t"><span>Total</span><span>'+EUR(t.total)+'</span></div>'+
+      '<a class="btn" id="pay" style="margin-top:16px" href="'+orderLink()+'" target="_blank" rel="noopener">Pedir por WhatsApp</a>';
+  }
+  function badges(){
+    var w=state.wish.length,c=0;Object.keys(state.cart).forEach(function(k){c+=state.cart[k]});
+    var a=$('#wishCount'),b=$('#cartCount');
+    a.hidden=!w;a.textContent=w;b.hidden=!c;b.textContent=c;
+    var f=$('#fab');if(f)f.href=orderLink();
+  }
+  function renderAll(msg){noReveal=started;renderGrid();noReveal=false;started=true;renderWish();renderCart(msg);badges();save()}
+
+  function toggleWish(id){
+    var i=state.wish.indexOf(id);
+    if(i>-1){state.wish.splice(i,1);toast('Quitado de tu lista de deseos')}
+    else{state.wish.push(id);toast('Guardado en tu lista de deseos')}
+    renderAll();
+  }
+  function addCart(id){state.cart[id]=(state.cart[id]||0)+1;renderAll();toast(byId[id].name+' añadido a la cesta')}
+
+  var panels=['dMenu','dWish','dCart','mAcc'],scrim=$('#scrim'),lastFocus=null;
+  function closeAll(){
+    panels.forEach(function(id){var e=document.getElementById(id);e.classList.remove('open');e.setAttribute('aria-hidden','true')});
+    scrim.classList.remove('open');
+    if(lastFocus&&lastFocus.focus){try{lastFocus.focus()}catch(e){}}
+    lastFocus=null;
+  }
+  function openPanel(id,btn){
+    closeAll();lastFocus=btn||null;
+    var e=document.getElementById(id);e.classList.add('open');e.setAttribute('aria-hidden','false');scrim.classList.add('open');
+    var f=e.querySelector('[data-close]');if(f)f.focus();
+  }
+  function goTo(id){
+    var e=document.getElementById(id);if(!e)return;
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    e.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+  }
+
+  function setMode(isNew){
+    $('#tabNew').setAttribute('aria-selected',isNew);$('#tabIn').setAttribute('aria-selected',!isNew);
+    $('#lblName').hidden=!isNew;$('#accBtn').textContent=isNew?'Crear cuenta':'Entrar';
+    $('#accNote').textContent=isNew?'Guarda tu lista de deseos, sigue tus pedidos y recibe un 10 % en tu primera compra.':'Entra para ver tu lista de deseos y tus pedidos.';
+    $('#accPass').setAttribute('autocomplete',isNew?'new-password':'current-password');
+  }
+
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    var el=t.closest('[data-wish]');if(el){toggleWish(el.getAttribute('data-wish'));return}
+    el=t.closest('[data-add]');if(el){addCart(el.getAttribute('data-add'));return}
+    el=t.closest('[data-qty]');if(el){
+      var id=el.getAttribute('data-id'),d=parseInt(el.getAttribute('data-qty'),10);
+      state.cart[id]=(state.cart[id]||0)+d;if(state.cart[id]<=0)delete state.cart[id];renderAll();return}
+    el=t.closest('[data-cat]');if(el){
+      state.cat=el.getAttribute('data-cat');renderChips();renderGrid();
+      if(el.hasAttribute('data-go')){e.preventDefault();closeAll();goTo('coleccion')}
+      return}
+    el=t.closest('[data-go]');if(el){e.preventDefault();closeAll();goTo(el.getAttribute('data-go'));return}
+    if(t.closest('[data-close]')||t===scrim){closeAll();return}
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll()});
+
+  $('#btnMenu').addEventListener('click',function(){openPanel('dMenu',this)});
+  $('#btnWish').addEventListener('click',function(){openPanel('dWish',this)});
+  $('#btnCart').addEventListener('click',function(){openPanel('dCart',this)});
+  $('#btnUser').addEventListener('click',function(){openPanel('mAcc',this)});
+  $('#home').addEventListener('click',function(e){e.preventDefault();goTo('top')});
+  $('#btnSearch').addEventListener('click',function(){
+    var r=$('#searchRow'),open=r.hidden;r.hidden=!open;this.setAttribute('aria-expanded',open);
+    if(open){$('#q').focus()}else{$('#q').value='';state.q='';renderGrid()}
+  });
+  $('#q').addEventListener('input',function(){state.q=this.value;renderGrid()});
+  $('#q').addEventListener('keydown',function(e){if(e.key==='Enter'){goTo('coleccion')}});
+
+  $('#tabNew').addEventListener('click',function(){setMode(true)});
+  $('#tabIn').addEventListener('click',function(){setMode(false)});
+  $('#accForm').addEventListener('submit',function(e){
+    e.preventDefault();closeAll();toast('Demo: aquí se conectaría el registro de clientes de la tienda');this.reset();
+  });
+  $('#nlForm').addEventListener('submit',function(e){
+    e.preventDefault();this.reset();toast('Tu código es BIENVENIDA10. Se aplica en la cesta.');
+  });
+  document.addEventListener('submit',function(e){
+    if(e.target.id==='cpForm'){
+      e.preventDefault();
+      var v=$('#cpCode').value.trim().toUpperCase();
+      if(v==='BIENVENIDA10'){state.coupon=true;renderAll('Código BIENVENIDA10 aplicado: 10 % de descuento.')}
+      else if(!v){state.coupon=false;renderAll('Código quitado.')}
+      else{state.coupon=false;renderAll('Ese código no es válido. Prueba con BIENVENIDA10.')}
+    }
+  });
+
+  $('#copyPhone').addEventListener('click',function(){
+    function pick(){var r=document.createRange();r.selectNodeContents($('#phone'));var s=window.getSelection();s.removeAllRanges();s.addRange(r);toast('Número seleccionado: cópialo')}
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText('+34 666 13 11 01').then(function(){toast('Número copiado')},pick)}
+      else{pick()}
+    }catch(e){pick()}
+  });
+
+  /* Gatito que asoma detrás de la nieve bajo el nombre */
+  (function(){
+    var HIDE=135,BASEY=161,LOOP=12;
+    var cx=0,cy=0,tx=0,ty=0,lastPtr=-99,lastOp=-1,heroVis=true,hero=$('#top');
+    hero.addEventListener('pointermove',function(e){var r=hero.getBoundingClientRect();tx=Math.max(-1,Math.min(1,(e.clientX-r.left)/r.width*2-1));ty=Math.max(-1,Math.min(1,(e.clientY-r.top)/r.height*2-1));lastPtr=performance.now()/1000});
+    hero.addEventListener('pointerleave',function(){lastPtr=-99;tx=0;ty=0});
+    if('IntersectionObserver' in window){new IntersectionObserver(function(es){heroVis=es[0].isIntersecting}).observe(hero)}
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function cl(v,a,b){return Math.max(a,Math.min(b,v))}
+    function ss(a,b,t){var x=cl((t-a)/(b-a),0,1);return x*x*(3-2*x)}
+    function outC(x){return 1-Math.pow(1-x,3)}
+    function inC(x){return x*x*x}
+    function seg(t,a,b,f){return f(cl((t-a)/(b-a),0,1))}
+    function st(t){
+      var dy=HIDE,x=350,tilt=0,gx=0,gy=0,blink=1;
+      if(t>=1.2&&t<5.9){
+        x=350;
+        dy=HIDE*(1-seg(t,1.2,2.3,outC))+HIDE*seg(t,5.1,5.9,inC);
+        if(t>2.4&&t<5.0)dy+=Math.sin((t-2.4)*2.4)*2.2;
+        tilt=(t>3.9&&t<4.9)?-7*ss(3.9,4.3,t)*(1-ss(4.5,4.9,t)):0;
+        gx=(t<2.6)?0:(t<3.5?-3.2:(t<4.4?3.2:-1));
+        gy=(t>4.4&&t<5.0)?-1.5:0;
+      }
+      if(t>=6.7&&t<11.4){
+        x=168;
+        var a=seg(t,6.7,7.5,outC),b=seg(t,8.6,9.1,outC),d=seg(t,10.2,11.1,inC);
+        dy=HIDE-(HIDE-52)*a-52*b;
+        if(t>=10.2)dy=dy*(1-d)+HIDE*d;
+        tilt=(t>9.3&&t<10.1)?6*ss(9.3,9.6,t):0;
+        gx=(t<8.0)?3:(t<8.6?0:(t<9.7?-1:2.5));
+      }
+      [3.4,4.65,8.95].forEach(function(c){var d=Math.abs(t-c);if(d<0.11)blink=Math.min(blink,0.08+d/0.11*0.92)});
+      return {dy:dy,x:x,tilt:tilt,gx:gx,gy:gy,blink:blink};
+    }
+    function render(t,abs){
+      var s=st(t);
+      var svg=$('#brandSvg');
+      var ent=reduce?0:1-ss(0,1.5,abs),sw=reduce?0:ss(1.2,3,abs);
+      var live=(performance.now()/1000-lastPtr)<2.5;
+      var ay=live?tx*16:Math.sin(abs*0.9)*9*sw,ax=live?-ty*10:(Math.sin(abs*0.65+1)*3.5+1)*sw;
+      cx+=(ax-cx)*0.08;cy+=(ay-cy)*0.08;
+      var op=reduce?1:ss(0,0.5,abs);if(op!==lastOp){svg.style.opacity=op;lastOp=op}
+      svg.style.transform=reduce?'none':'rotateX('+(cx-78*ent*ent)+'deg) rotateY('+cy+'deg) translateY('+(26*ent)+'px)';
+      $('#bTitle2').setAttribute('transform','translate('+(-cy*0.28)+' '+(2.5+cx*0.2)+')');
+      var tg=$('#bTitleG');
+      if(reduce||abs>=2.1){if(tg.hasAttribute('clip-path'))tg.removeAttribute('clip-path')}
+      else{tg.setAttribute('clip-path','url(#bWriteClip)');$('#bWriteRect').setAttribute('width',340*ss(0.3,1.9,abs))}
+      $('#bCat').setAttribute('transform','translate('+s.x+' '+(BASEY+s.dy)+') rotate('+s.tilt+') scale(.92)');
+      $('#bEyeL').setAttribute('transform','translate(-13 -3) scale(1 '+s.blink+')');
+      $('#bEyeR').setAttribute('transform','translate(13 -3) scale(1 '+s.blink+')');
+      ['bPL','bPR'].forEach(function(id){var e=$('#'+id);e.setAttribute('cx',s.gx);e.setAttribute('cy',s.gy)});
+      $('#bPaws').setAttribute('opacity',cl(1-s.dy/16,0,1));
+      var pl=$('#bPawL'),pr=$('#bPawR');
+      pl.setAttribute('cx',s.x-16);pl.setAttribute('cy',207);
+      pr.setAttribute('cx',s.x+16);pr.setAttribute('cy',207);
+    }
+    render(0,0);
+    if(reduce){render(0,99);return}
+    var start=null;
+    function frame(ts){requestAnimationFrame(frame);if(!heroVis||document.hidden)return;if(start===null)start=ts;var abs=(ts-start)/1000,tt=abs-0.9;render(tt<0?0:tt%LOOP,abs)}
+    requestAnimationFrame(frame);
+  })();
+
+  /* Efecto 3D en las piezas: se inclinan con el cursor, según la posición al hacer scroll y con un vaivén suave (30 fps, solo cuando se ven) */
+  (function(){
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    var grid=$('#grid'),ptr=null,near=true,last=0;
+    function c1(v){return Math.max(-1,Math.min(1,v))}
+    function aim(e){
+      var t=e.target.closest&&e.target.closest('.tile');
+      if(!t){ptr=null;return}
+      var r=t.getBoundingClientRect();
+      ptr={el:t,nx:c1((e.clientX-r.left)/r.width*2-1),ny:c1((e.clientY-r.top)/r.height*2-1)};
+    }
+    grid.addEventListener('pointermove',aim,{passive:true});
+    grid.addEventListener('pointerdown',aim,{passive:true});
+    ['pointerleave','pointercancel','pointerup'].forEach(function(n){grid.addEventListener(n,function(){ptr=null},{passive:true})});
+    if('IntersectionObserver' in window){new IntersectionObserver(function(es){near=es[0].isIntersecting},{rootMargin:'250px 0px'}).observe($('#coleccion'))}
+    function frame(ts){
+      requestAnimationFrame(frame);
+      if(!near||document.hidden||ts-last<32)return;
+      last=ts;
+      var tiles=grid.querySelectorAll('.tile'),n=tiles.length,vh=window.innerHeight,rects=[],i,t,r;
+      for(i=0;i<n;i++)rects[i]=tiles[i].getBoundingClientRect();
+      for(i=0;i<n;i++){
+        t=tiles[i];r=rects[i];
+        if(r.bottom<-40||r.top>vh+40)continue;
+        var tx,ty;
+        if(ptr&&ptr.el===t){tx=-ptr.ny*14;ty=ptr.nx*16}
+        else{var vy=(r.top+r.height/2)/vh*2-1;tx=-vy*8;ty=Math.sin(ts/1000*0.8+i*1.3)*6}
+        var rx=t._rx===undefined?tx:t._rx,ry=t._ry===undefined?ty:t._ry;
+        rx+=(tx-rx)*0.2;ry+=(ty-ry)*0.2;
+        if(t._rx!==undefined&&Math.abs(rx-t._rx)<0.02&&Math.abs(ry-t._ry)<0.02)continue;
+        t._rx=rx;t._ry=ry;
+        t.style.transform='rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg)';
+      }
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  /* Destello dorado que sigue al cursor o al dedo (también al deslizar), por detrás de las piezas */
+  (function(){
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    var spot=document.createElement('div');
+    spot.className='spot';spot.setAttribute('aria-hidden','true');
+    document.body.appendChild(spot);
+    var x=0,y=0,tx=0,ty=0,vis=false,run=false,hideT;
+    function put(){spot.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0)'}
+    function loop(){
+      x+=(tx-x)*0.25;y+=(ty-y)*0.25;put();
+      if(Math.abs(tx-x)>0.4||Math.abs(ty-y)>0.4){requestAnimationFrame(loop)}else{run=false}
+    }
+    function hide(){spot.style.opacity='0';vis=false}
+    function move(cx,cy,touch){
+      tx=cx;ty=cy;
+      if(!vis){x=cx;y=cy;put();vis=true;spot.style.opacity='1'}
+      clearTimeout(hideT);
+      if(touch){hideT=setTimeout(hide,1100)}
+      if(!run){run=true;requestAnimationFrame(loop)}
+    }
+    document.addEventListener('pointermove',function(e){if(e.pointerType!=='touch')move(e.clientX,e.clientY,false)},{passive:true});
+    document.documentElement.addEventListener('mouseleave',hide);
+    function onTouch(e){var t=e.touches&&e.touches[0];if(t)move(t.clientX,t.clientY,true)}
+    document.addEventListener('touchstart',onTouch,{passive:true});
+    document.addEventListener('touchmove',onTouch,{passive:true});
+    document.addEventListener('touchend',function(){clearTimeout(hideT);hideT=setTimeout(hide,500)},{passive:true});
+    document.addEventListener('touchcancel',function(){clearTimeout(hideT);hideT=setTimeout(hide,500)},{passive:true});
+  })();
+
+  $('#heroArt').innerHTML=art('loose','blanco');
+  setMode(true);renderChips();renderAll();
+})();
+</script>
+</body>
+</html>
